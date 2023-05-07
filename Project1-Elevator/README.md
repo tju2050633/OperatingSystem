@@ -9,11 +9,10 @@ Project1-Elevator
 │       	├──Prefabs   # Unity预制体
 │       	├──Resources # 游戏资源
 │       	└──scripts   # C#脚本    
-├── 设计方案.docx 
 ├── ElevatorScheduling-win
 │				├── ElevatorScheduling.exe #windows可执行文件
 │				└── ...
-├── ElevatorScheduling.exec   # macOS可执行文件
+├── ElevatorScheduling.app   # macOS 应用程序
 ├── img      
 └── README.md
 ```
@@ -40,9 +39,22 @@ Project1-Elevator
 - 开发平台：Unity 2021.3.17f1c1 LTS
 - 开发语言：C# (.NET version 6.0.301)
 - 运行环境：Windows/macOS（运行可执行文件无需安装依赖）
-- 运行方法
-  - windows：下载ElevatorScheduling-win文件夹，打开其中的ElevatorScheduling.exe应用程序
-  - macOS：下载ElevatorScheduling.exec并打开
+
+## 运行方法
+
+clone项目至本地
+
+```shell
+git@github.com:tju2050633/OperatingSystem.git
+```
+
+Windows:
+
+进入/OperatingSystem/Project1-Elevator/ElevatorScheduling-win/，双击打开Elevator Scheduling.exe。
+
+macOS：
+
+进入/OperatingSystem/Project1-Elevator/，双击打开Elevator Scheduling.app。
 
 ## 运行截图和演示视频
 
