@@ -6,13 +6,13 @@
 Project1-Elevator
 ├── Elevator Scheduling # 项目资源
 │   └── Assets
-│      ├──Prefabs   # Unity预制体
-│      ├──Resources # 游戏资源
-│      └──scripts   # C#脚本    
+│       ├──Prefabs   # Unity预制体
+│       ├──Resources # 游戏资源
+│       └──scripts   # C#脚本    
 ├── ElevatorScheduling-win
-│	  ├── ElevatorScheduling.exe #windows可执行文件
-│	  └── ...
-├── ElevatorScheduling.app   # macOS 应用程序
+│   ├── ElevatorScheduling.exe #windows可执行文件
+│   └── ...
+├── ElevatorScheduling-mac.app   # macOS 应用程序
 ├── img      
 └── README.md
 ```
