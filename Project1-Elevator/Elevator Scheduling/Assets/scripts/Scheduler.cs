@@ -64,5 +64,25 @@ namespace ElevatorScheduling
             }
             return id;
         }
+
+        /**
+         * 设置电梯为警报状态
+         * @param id 电梯id
+         */
+        public void SetAlert(int id, bool alert)
+        {
+            elevators[id - 1].setAlerting(alert);
+
+        }
+
+        /**
+         * 设置电梯开门
+         * @param id 电梯id
+         */
+        public void SetOpen(int id, bool open)
+        {
+            // 设置停止状态
+            elevators[id - 1].setParking(open);
+        }
     }
 }

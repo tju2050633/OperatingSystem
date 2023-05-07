@@ -35,7 +35,7 @@ namespace ElevatorScheduling
         }
 
         // 设置电梯面板状态图像
-        public void SetPanelImage(int id, int direction)
+        public void SetPanelImage(int id, int state)
         {
             // 找到对应电梯的面板图片
             ElevatorCompose elevator = elevators[id - 1];
@@ -46,8 +46,11 @@ namespace ElevatorScheduling
 
             // 设置面板图片
             string img_path = "";
-            switch (direction)
+            switch (state)
             {
+                case 2:
+                    img_path = "StateAlert";
+                    break;
                 case 1:
                     img_path = "StateAscending";
                     break;
@@ -63,6 +66,7 @@ namespace ElevatorScheduling
             image.sprite = Resources.Load<Sprite>(img_path);
         }
 
+        // 设置电梯图标
         public void SetElevImage(int id, string path)
         {
             // 找到电梯图像
@@ -75,38 +79,45 @@ namespace ElevatorScheduling
             image.sprite = Resources.Load<Sprite>(path);
         }
 
-        // 设置内部按钮颜色为灰色
-        public void SetInnerBtnShadow(int id, int floor, bool active)
+        // 设置内部按钮颜色
+        public void SetInnerBtnActive(int id, string type, bool active)
         {
             // 找到该按钮
             ElevatorCompose elevator = elevators[id - 1];
             GameObject elevatorPanel = elevator.transform.Find("ElevatorPanel").gameObject;
-            GameObject floorBtn = elevatorPanel.transform.Find("FloorBtn").gameObject;
-            GameObject btn = floorBtn.transform.Find(floor.ToString()).gameObject;
+            GameObject btn;
+            if(type == "Alert" || type == "Open" || type == "Close")
+            {
+                GameObject otherBtn = elevatorPanel.transform.Find("OtherBtn").gameObject;
+                btn = otherBtn.transform.Find(type).gameObject;
+            }
+            else
+            {
+                GameObject floorBtn = elevatorPanel.transform.Find("FloorBtn").gameObject;
+                btn = floorBtn.transform.Find(type).gameObject;
+            }
             Image image = btn.GetComponentInChildren<Image>();
 
             // 设置为灰色/非灰色
-            image.color = active ? new Color(0.5f, 0.5f, 0.5f) : new Color(1, 1, 1);
+            Color color = image.color;
+            image.color = active ? new Color(color.r, color.g, color.b, 0.8f) : new Color(color.r, color.g, color.b, 1);
+
+            // 设置为可用/不可用
+            btn.GetComponent<Button>().interactable = !active;
         }
 
-        // 设置外部一层2个按钮为激活状态
-        public void SetOutBtnActive(int floor, bool active)
+        // 设置外部一层2个按钮
+        public void SetOutBtnActive(int floor, string type, bool active)
         {
-            // 找到该层2个外部按钮，若按钮存在则设置为激活/非激活状态
+            // 找到该层外部按钮，若按钮存在则设置为激活/非激活状态
             GameObject outBtnContainer = GameObject.Find("OutBtn");
-            Transform outBtnUpTransform = outBtnContainer.transform.Find("Up" + floor.ToString());
-            Transform outBtnDownTransform = outBtnContainer.transform.Find("Down" + floor.ToString());
-            if(outBtnUpTransform != null)
+
+            Transform outBtnUpTransform = outBtnContainer.transform.Find(type + floor.ToString());
+            if (outBtnUpTransform != null)
             {
                 GameObject outBtnUp = outBtnUpTransform.gameObject;
                 Image upImage = outBtnUp.GetComponentInChildren<Image>();
-                upImage.sprite = active ? Resources.Load<Sprite>("BtnOutUpActive") : Resources.Load<Sprite>("BtnOutUp");
-            }
-            if(outBtnDownTransform != null)
-            {
-                GameObject outBtnDown = outBtnDownTransform.gameObject;
-                Image downImage = outBtnDown.GetComponentInChildren<Image>();
-                downImage.sprite = active ? Resources.Load<Sprite>("BtnOutDownActive") : Resources.Load<Sprite>("BtnOutDown");
+                upImage.sprite = active ? Resources.Load<Sprite>("BtnOut" + type + "Active") : Resources.Load<Sprite>("BtnOut" + type);
             }
         }
     }

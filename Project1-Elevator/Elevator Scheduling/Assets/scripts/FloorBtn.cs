@@ -36,7 +36,7 @@ namespace ElevatorScheduling
         void onClick()
         {
             // 设置按钮颜色灰色
-            uiManager.SetInnerBtnShadow(id, floor, true);
+            uiManager.SetInnerBtnActive(id, floor.ToString(), true);
 
             // 通过调度器给所在电梯添加任务
             scheduler.AddInnerTask(floor, id);

@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ElevatorScheduling;
+using System.Threading;
 
 namespace ElevatorScheduling
 {
     public class Elevator : MonoBehaviour
     {
+        // 互斥锁
+        private Mutex mutex = new Mutex();
+
         // 持有UI管理器
         public UI_Manager uiManager;
 
@@ -19,14 +23,96 @@ namespace ElevatorScheduling
         private const float distance = 49.0f; // 两层楼间的距离
         private List<float> heights;  // 每层楼的高度
 
+        /* ----------使用mutex保护的电梯属性get/set方法---------- */
+
+        public void setAlerting(bool alerting)
+        {
+            mutex.WaitOne();
+            this.alerting = alerting;
+            mutex.ReleaseMutex();
+        }
+
+        public bool getAlerting()
+        {
+            mutex.WaitOne();
+            bool value = alerting;
+            mutex.ReleaseMutex();
+            return value;
+        }
+
+        public void setParking(bool parking)
+        {
+            mutex.WaitOne();
+            this.parking = parking;
+            mutex.ReleaseMutex();
+        }
+
+        public bool getParking()
+        {
+            mutex.WaitOne();
+            bool value = parking;
+            mutex.ReleaseMutex();
+            return value;
+        }
+
+        public void setDirection(int direction)
+        {
+            mutex.WaitOne();
+            this.direction = direction;
+            mutex.ReleaseMutex();
+        }
+
+        public int getDirection()
+        {
+            mutex.WaitOne();
+            int value = direction;
+            mutex.ReleaseMutex();
+            return value;
+        }
+
+        public void setFloor(int floor)
+        {
+            mutex.WaitOne();
+            this.floor = floor;
+            mutex.ReleaseMutex();
+        }
+
+        public int getFloor()
+        {
+            mutex.WaitOne();
+            int value = floor;
+            mutex.ReleaseMutex();
+            return value;
+        }
+
+        public void insertTask(int priority, int task_floor)
+        {
+            mutex.WaitOne();
+            innerTasks.Insert(priority, task_floor);
+            mutex.ReleaseMutex();
+        }
+
+        public void removeTask(int task_floor)
+        {
+            mutex.WaitOne();
+            innerTasks.Remove(task_floor);
+            mutex.ReleaseMutex();
+        }
+
+        /*-----------------------------------------------------*/
+
+        /*
+        * 初始化
+        */
         void Start()
         {
-            // 初始化
-            floor = 1;
-            direction = 0;
-            parking = false;
-            alerting = false;
+            setFloor(1);
+            setDirection(0);
+            setParking(false);
+            setAlerting(false);
             innerTasks = new List<int>();
+
+            // 获取UI管理器
             uiManager = GameObject.Find("UI_Manager").GetComponent<UI_Manager>();
 
             // 计算每层楼的高度
@@ -39,16 +125,16 @@ namespace ElevatorScheduling
         }
 
         /*
-        * 电梯移动
+        * 每帧电梯移动
         */
         void Update()
         {
+            // 判定移动方向，更新电梯图片
+            UpdateDirection();
+
             // 停靠、报警、无任务时不移动
             if (parking || alerting || innerTasks.Count == 0)
                 return;
-
-            // 判定移动方向，更新电梯图片
-            UpdateDirection();
 
             // 每帧移动一次，速率为每秒1层楼
             transform.Translate(Vector3.up * distance * direction * Time.deltaTime);
@@ -78,11 +164,16 @@ namespace ElevatorScheduling
         */
         private void UpdateDirection()
         {
+            if (parking || alerting)
+                return;
+
             if (innerTasks.Count == 0)
                 direction = 0;
-            else
-                direction = innerTasks[0] > floor ? 1 : -1;
-            
+            else if (innerTasks[0] > getFloor())
+                direction = 1;
+            else if (innerTasks[0] < getFloor())
+                direction = -1;
+
             uiManager.SetPanelImage(id, direction);
         }
 
@@ -92,10 +183,13 @@ namespace ElevatorScheduling
         public void Park(int park_floor)
         {
             // 去掉对应的任务
-            innerTasks.Remove(park_floor);
+            removeTask(park_floor);
+
+            // 判定移动方向，更新电梯图片
+            UpdateDirection();
 
             // 设置电梯自身状态停止
-            parking = true;
+            setParking(true);
 
             // 开门
             uiManager.SetElevImage(id, "ElevatorOpen");
@@ -104,30 +198,30 @@ namespace ElevatorScheduling
             Invoke("Continue", 3.0f);
 
             // 设置该楼层外面的对应上/下按钮非激活
-            uiManager.SetOutBtnActive(park_floor, false);
+            if (getDirection() == 0)
+            {
+                uiManager.SetOutBtnActive(park_floor, "Up", false);
+                uiManager.SetOutBtnActive(park_floor, "Down", false);
+            }
+            else
+            {
+                string btn_type = getDirection() == 1 ? "Up" : "Down";
+                uiManager.SetOutBtnActive(park_floor, btn_type, false);
+            }
 
             // 设置电梯内部该楼层按钮去掉灰色
-            uiManager.SetInnerBtnShadow(id, park_floor, false);
+            uiManager.SetInnerBtnActive(id, park_floor.ToString(), false);
         }
 
+        /*
+        * 停靠3s后自动运行
+        */
         private void Continue()
         {
-            parking = false;
+            setParking(false);
 
             // 关门
             uiManager.SetElevImage(id, "Elevator");
-
-            // 若停靠在其他楼层，则3秒后检查是否还有任务，若没有则返回1楼
-            if (floor != 1)
-                Invoke("CheckIdle", 3.0f);
-        }
-
-        private void CheckIdle()
-        {
-            if (innerTasks.Count == 0)
-            {
-                innerTasks.Add(1);
-            }
         }
 
         /*
@@ -143,7 +237,7 @@ namespace ElevatorScheduling
             for (int i = 0; i < innerTasks.Count; i++)
             {
                 // 计算电梯移动路径两端的楼层
-                int last_floor = i == 0 ? floor : innerTasks[i - 1];
+                int last_floor = i == 0 ? getFloor() : innerTasks[i - 1];
                 int next_floor = innerTasks[i];
 
                 // 检查电梯任务列表，计算目标任务是否在电梯移动路径两端的楼层之间
@@ -163,6 +257,13 @@ namespace ElevatorScheduling
         */
         public void AssignTask(int task_floor, int task_direction)
         {
+            // 如果当前处在该楼层，且电梯闲置或方向一致，则直接停靠
+            if (task_floor == getFloor() && (getDirection() == 0 || getDirection() == task_direction))
+            {
+                Park(task_floor);
+                return;
+            }
+
             // 计算任务优先级
             int priority = CalcTaskPriority(task_floor, task_direction);
 
@@ -171,7 +272,7 @@ namespace ElevatorScheduling
                 return;
 
             // 添加任务到内部任务队列
-            innerTasks.Insert(priority, task_floor);
+            insertTask(priority, task_floor);
         }
     }
 }

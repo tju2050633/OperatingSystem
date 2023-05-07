@@ -35,7 +35,7 @@ namespace ElevatorScheduling
         void onClick()
         {
             // 设置该层外部按钮激活
-            uiManager.SetOutBtnActive(floor, true);
+            uiManager.SetOutBtnActive(floor, "Down", true);
 
             // 调用scheduler方法，添加任务（此按钮所在楼层，需要上还是下）
             scheduler.AddOutTask(floor, -1);
