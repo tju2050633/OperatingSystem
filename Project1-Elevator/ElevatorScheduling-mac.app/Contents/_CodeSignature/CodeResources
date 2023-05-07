@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Data/Managed/Assembly-CSharp.dll</key>
 		<data>
-		87FX5ML1inpX1mDNqjtxHMCcBVA=
+		xmTaf2uIUTfcqho5v7IizdhXgw8=
 		</data>
 		<key>Resources/Data/Managed/Mono.Security.dll</key>
 		<data>
@@ -534,19 +534,19 @@
 		</data>
 		<key>Resources/Data/globalgamemanagers</key>
 		<data>
-		o12OGqZrjW/G7b2+BHBzDRxf4F8=
+		WZUY7xqdDKPh6KCthbIm5Rg5RE4=
 		</data>
 		<key>Resources/Data/globalgamemanagers.assets</key>
 		<data>
-		vUGrf3bvfiAgglT/zoXpgR2+8vw=
+		K2oWKJJMLGpfCgK7FR8gftNI8ls=
 		</data>
 		<key>Resources/Data/level0</key>
 		<data>
-		wZUL1kkyRKZQhIZw5Knd0MTggao=
+		TEmfR38LMFGMaV707eYNVzdm8mU=
 		</data>
 		<key>Resources/Data/resources.assets</key>
 		<data>
-		Yd+s0rDValTUvY4gJjbL8YZe5qs=
+		4oa8ve1UR5Wier+QlhTszTzJYX8=
 		</data>
 		<key>Resources/Data/resources.assets.resS</key>
 		<data>
@@ -554,15 +554,15 @@
 		</data>
 		<key>Resources/Data/sharedassets0.assets</key>
 		<data>
-		0zMKEQ1RF0j3EgXB2YB6judzm6I=
+		cHUh6tA8n8ysji4U9wLIbs11wNY=
 		</data>
 		<key>Resources/Data/sharedassets0.assets.resS</key>
 		<data>
-		CsMeayf6Q5TE6WR/5nhtsZLkQ50=
+		FSAF9BYL3/TDq3sc2Wmb3oqX4Lc=
 		</data>
 		<key>Resources/DefaultPreferences.plist</key>
 		<data>
-		VNbnYUGjCc5cH+QpbqXpbK3KbT8=
+		328gBco4OE4lwDcEUI4+p+dVOLg=
 		</data>
 		<key>Resources/MainMenu.nib/designable.nib</key>
 		<data>
@@ -749,16 +749,16 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			gq1hafgokAkfTvHooGwBd614Z8c=
+			KstUyA9sekiztpRNM5QLALM/PE8=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"82ad6169f82890091f4ef1e8a06c0177ad7867c7" or cdhash H"d30d00513b6c90771cd27af833e1c9a0c2bca22e"</string>
+			<string>cdhash H"2acb54c80f6c7a48b3b6944d33940b00b33f3c4f" or cdhash H"2e02947ded141319eefda32d61e75bb97776d2a4"</string>
 		</dict>
 		<key>Resources/Data/Managed/Assembly-CSharp.dll</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			YFZvTdhZ26qsIwQrwSoQwhu7cvy49CJUFUCA0r5157Q=
+			tlKqA1qEmjVIUh77XQD2Igsqp68SBUVexwUolfCTryA=
 			</data>
 		</dict>
 		<key>Resources/Data/Managed/Mono.Security.dll</key>
@@ -1682,28 +1682,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			lD/FdiG5hrYDNm6dUooZ6tUvcBujkXLxkoux8eHWdfo=
+			rYZj9CjWleVV/7c96yqBznvGRnNxC7wsZ4TZi3NsUCU=
 			</data>
 		</dict>
 		<key>Resources/Data/globalgamemanagers.assets</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			rGyNBcSO8t2bcN7aYGkL94P0j3u3hV4zyGXB6cTTSPw=
+			MWAaByKrpM33tRqogGp23LSqcFPE46gnOv9hwxzjPB0=
 			</data>
 		</dict>
 		<key>Resources/Data/level0</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xsgFc+y2LfUva5f++JQQla3EvukqCXU/mhdcUEz+Hrc=
+			6k/wBDiy8u1y9lnJG5bd7VCZ7Ycxr6LF9DRFYF1wtuk=
 			</data>
 		</dict>
 		<key>Resources/Data/resources.assets</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			kLjjzLJShaHtzhPLul4DSKWz0INiy55x/yyy7HWF9mA=
+			dhh+4t72+alsoCbYduh5gFDuaxpFpq7Zmf+pH5w9Xgc=
 			</data>
 		</dict>
 		<key>Resources/Data/resources.assets.resS</key>
@@ -1717,21 +1717,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mBkFmiUVxOh0VemHuOK2f+28CVtLOBjpBXBhenYhy4I=
+			sN5y/RI6MMGFzu+DjF5Q96mjTr5cM1EP1RH0y3CY19Y=
 			</data>
 		</dict>
 		<key>Resources/Data/sharedassets0.assets.resS</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			uHL/Q/Fi9AvXdInR31YqIfTwvIYdU283eg/xaIY1qFA=
+			LWHi8vHSS5GikGkv1eNtafFQk9xKdWmg/Exquu/iwzo=
 			</data>
 		</dict>
 		<key>Resources/DefaultPreferences.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			W9oOJGpWGJUa6Ru37jQt0rSm6JGOOXZkQxPBaqSD0mI=
+			3tHJtvdHAvgSq7TYC8CFKP2EJuF4CKBM3gFbTTS0mPM=
 			</data>
 		</dict>
 		<key>Resources/MainMenu.nib/designable.nib</key>

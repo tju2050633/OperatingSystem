@@ -50,18 +50,28 @@ namespace ElevatorScheduling
          */
         public int CalcProperElev(int task_floor, int task_direction)
         {
+            // 检查是否5个电梯都在报警
+            bool all_alerting = elevators[0].getAlerting() && elevators[1].getAlerting() && elevators[2].getAlerting() && elevators[3].getAlerting() && elevators[4].getAlerting();
+
             // 遍历5个电梯，求出优先级最高的电梯id
             int id = 0, min_prio = Int32.MaxValue;
             foreach (Elevator elev in elevators)
             {
+                // 如果不是5个都在报警，则排除正在报警的电梯
+                if (!all_alerting && elev.getAlerting())
+                    continue;
+
                 // 计算优先级
                 int prio = elev.CalcTaskPriority(task_floor, task_direction);
-                if (prio < min_prio)
+
+                // 更新条件：优先级更高，或者优先级相同但距离更近
+                if (prio < min_prio || (prio == min_prio && id != 0 && Math.Abs(elev.getFloor() - task_floor) < Math.Abs(elevators[id - 1].getFloor() - task_floor)))
                 {
                     min_prio = prio;
                     id = elev.id;
                 }
             }
+
             return id;
         }
 

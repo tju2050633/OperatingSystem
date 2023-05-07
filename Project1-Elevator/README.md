@@ -56,7 +56,7 @@ macOS：
 
 进入/OperatingSystem/Project1-Elevator/，双击打开Elevator Scheduling.app。
 
-## 运行截图和演示视频
+## 运行截图
 
 ![](img/initial.png)
 
@@ -66,7 +66,7 @@ macOS：
 
 <center>运行状态<center/>
 
-演示视频：
+
 
 ## 架构设计
 
@@ -79,6 +79,7 @@ macOS：
 - 电梯Elevator：核心的任务处理机，是多个任务进程需要抢占的资源，可以并行地进行移动等动作。电梯的不断移动即处理任务的过程，电梯不断接受来自调度器分配的任务，同时通过返回任务优先级帮助调度器进行电梯调度。电梯是主要的GUI组件，UI管理器主要针对电梯内的一系列子对象进行UI更改。GUI中，电梯具有以下子对象：可上下移动、开门关门的Sprite，楼层按钮、开关门按钮、报警按钮，电梯面板（显示当前楼层和电梯所处状态），楼层标签等等。
 - 调度器Scheduler：专门处理电梯调度和任务分配的对象，不具有GUI组件。调度器接受来自界面上所有按钮创建和发送的任务，调度器从电梯对象获取该任务的优先级，并计算出任务优先级最高的电梯，将该任务分配给该电梯，达到优化电梯调度、节约任务处理时间的目的。
 - UI管理器UI Manager：专门进行GUI更改的对象，自身不具有GUI组件。UI管理器监听按钮点击事件和电梯运行状态，并即时更改GUI（同时管理按钮是否可用）。例如，按钮点击后，UI管理器需要将其颜色变淡，并禁用该按钮，以表示按钮已经激活；电梯到达或停靠某楼层后，UI管理器需要更新电梯面板上的楼层显示和电梯状态。
+- 各类按钮Buttons：如电梯外部的上行按钮、下行按钮，电梯内部的楼层按钮、报警按钮、开门按钮、关门按钮。上行/下行/楼层按钮会创建新任务，并发送给调度器去分配给电梯；报警按钮、开门/关门按钮一方面改变电梯对象的内部状态（如报警状态、停靠状态），控制电梯的运行，另一方面向UI管理器申请更改UI界面，如电梯面板显示报警、按钮自身变为灰色且不可用等。
 
 ## 核心代码说明
 
@@ -241,7 +242,7 @@ macOS：
 
    
 
-   调度器选择电梯时，对每个电梯调用该算法，得到优先级最高（值最小）的电梯，对其分配该任务。
+   调度器选择电梯时，对每个电梯调用该算法，得到优先级最高（值最小）的电梯，对其分配该任务。如果多个电梯优先级相同，则优先选择距离更近的电梯。此外，调度器会排除正在报警的电梯，但若所有电梯都在报警，则按正常情况调度。
 
    
 
@@ -283,28 +284,38 @@ macOS：
    // Scheduler.cs
    
    /**
-    * 计算任务分配给哪个电梯
-    * @param floor 楼层
-    * @param direction 方向：1上，-1下
-    */
+   * 计算任务分配给哪个电梯
+   * @param floor 楼层
+   * @param direction 方向：1上，-1下
+   */
    public int CalcProperElev(int task_floor, int task_direction)
    {
-       // 遍历5个电梯，求出优先级最高的电梯id
-       int id = 0, min_prio = Int32.MaxValue;
-       foreach (Elevator elev in elevators)
-       {
-           // 计算优先级
-           int prio = elev.CalcTaskPriority(task_floor, task_direction);
-           if (prio < min_prio)
-           {
-               min_prio = prio;
-               id = elev.id;
-           }
-       }
-       return id;
+     // 检查是否5个电梯都在报警
+     bool all_alerting = elevators[0].getAlerting() && elevators[1].getAlerting() && elevators[2].getAlerting() && elevators[3].getAlerting() && elevators[4].getAlerting();
+   
+     // 遍历5个电梯，求出优先级最高的电梯id
+     int id = 0, min_prio = Int32.MaxValue;
+     foreach (Elevator elev in elevators)
+     {
+         // 如果不是5个都在报警，则排除正在报警的电梯
+         if (!all_alerting && elev.getAlerting())
+             continue;
+   
+         // 计算优先级
+         int prio = elev.CalcTaskPriority(task_floor, task_direction);
+   
+         // 更新条件：优先级更高，或者优先级相同但距离更近
+         if (prio < min_prio || (prio == min_prio && id != 0 && Math.Abs(elev.getFloor() - task_floor) < Math.Abs(elevators[id - 1].getFloor() - task_floor)))
+         {
+             min_prio = prio;
+             id = elev.id;
+         }
+     }
+   
+     return id;
    }
    ```
-
+   
    
 
 ​	
