@@ -1,1 +1,20 @@
 .DS_Store
+PPT/
+miniOS/
+osfs.iso/
+*.meta
+
+Project1-Elevator/Architecture Illustration.pptx
+Project1-Elevator/ProjectCommit/
+Project1-Elevator/Elevator\ Scheduling/
+!Project1-Elevator/Elevator\ Scheduling/Assets/Prefabs
+!Project1-Elevator/Elevator\ Scheduling/Assets/scripts
+!Project1-Elevator/Elevator\ Scheduling/Assets/Resources
+
+Project2-PageSwapManagement/PageSwapManagement/
+!Project2-PageSwapManagement/PageSwapManagement/Assets/prefabs
+!Project2-PageSwapManagement/PageSwapManagement/Assets/scripts
+
+
+Project3-FileManagement/FileManagement/
+
