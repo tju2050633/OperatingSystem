@@ -45,7 +45,7 @@ Project1-Elevator
 clone项目至本地
 
 ```shell
-git@github.com:tju2050633/OperatingSystem.git
+git clone git@github.com:tju2050633/OperatingSystem.git
 ```
 
 Windows:
@@ -54,7 +54,7 @@ Windows:
 
 macOS：
 
-进入/OperatingSystem/Project1-Elevator/，双击打开Elevator Scheduling.app。
+进入/OperatingSystem/Project1-Elevator/，双击打开ElevatorScheduling-mac.app。
 
 ## 运行截图
 
