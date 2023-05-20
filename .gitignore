@@ -12,11 +12,17 @@ Project1-Elevator/Elevator\ Scheduling/
 !Project1-Elevator/Elevator\ Scheduling/Assets/Resources
 
 Project2-PageSwapManagement/Architecture Illustration.pptx
-Project2-PageSwapManagement/PageSwapManagement/
-!Project2-PageSwapManagement/PageSwapManagement/Assets/Prefabs
-!Project2-PageSwapManagement/PageSwapManagement/Assets/scripts
-!Project2-PageSwapManagement/PageSwapManagement/Assets/Resources
-
+Project2-PageSwapManagement/PageSwapManagement/.vscode
+Project2-PageSwapManagement/PageSwapManagement/Assets/Scenes/
+Project2-PageSwapManagement/PageSwapManagement/Assets/TextMesh\ Pro/
+Project2-PageSwapManagement/PageSwapManagement/Library/
+Project2-PageSwapManagement/PageSwapManagement/Logs/
+Project2-PageSwapManagement/PageSwapManagement/obj/
+Project2-PageSwapManagement/PageSwapManagement/Packages/
+Project2-PageSwapManagement/PageSwapManagement/ProjectSettings/
+Project2-PageSwapManagement/PageSwapManagement/UserSettings/
+Project2-PageSwapManagement/PageSwapManagement/Assembly-CSharp.csproj
+Project2-PageSwapManagement/PageSwapManagement/PageSwapManagement.sln
 
 Project3-FileManagement/FileManagement/
 !Project3-FileManagement/FileManagement/Assets/Prefabs
