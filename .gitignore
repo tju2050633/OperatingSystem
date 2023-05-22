@@ -40,7 +40,16 @@ Project2-PageSwapManagement/PageSwapManagement/Assembly-CSharp.csproj
 Project2-PageSwapManagement/PageSwapManagement/PageSwapManagement.sln
 
 # Project3-FileManagement
-Project3-FileManagement/FileManagement/
-!Project3-FileManagement/FileManagement/Assets/Prefabs
-!Project3-FileManagement/FileManagement/Assets/scripts
-!Project3-FileManagement/FileManagement/Assets/Resources
+Project3-FileManagement/Architecture Illustration.pptx
+Project3-FileManagement/ProjectCommit/
+Project3-FileManagement/FileManagement/.vscode
+Project3-FileManagement/FileManagement/Assets/Scenes/
+Project3-FileManagement/FileManagement/Assets/TextMesh\ Pro/
+Project3-FileManagement/FileManagement/Library/
+Project3-FileManagement/FileManagement/Logs/
+Project3-FileManagement/FileManagement/obj/
+Project3-FileManagement/FileManagement/Packages/
+Project3-FileManagement/FileManagement/ProjectSettings/
+Project3-FileManagement/FileManagement/UserSettings/
+Project3-FileManagement/FileManagement/Assembly-CSharp.csproj
+Project3-FileManagement/FileManagement/FileManagement.sln
