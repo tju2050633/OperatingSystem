@@ -7,49 +7,25 @@ osfs.iso/
 # Project1-Elevator
 Project1-Elevator/Architecture Illustration.pptx
 Project1-Elevator/ProjectCommit/
-Project1-Elevator/Elevator\ Scheduling/.plastic
-Project1-Elevator/Elevator\ Scheduling/.vscode
-Project1-Elevator/Elevator\ Scheduling/Assets/Scenes/
-Project1-Elevator/Elevator\ Scheduling/Assets/TextMesh\ Pro/
-Project1-Elevator/Elevator\ Scheduling/Library/
-Project1-Elevator/Elevator\ Scheduling/Logs/
-Project1-Elevator/Elevator\ Scheduling/obj/
-Project1-Elevator/Elevator\ Scheduling/Packages/
-Project1-Elevator/Elevator\ Scheduling/ProjectSettings/
-Project1-Elevator/Elevator\ Scheduling/Temp/
-Project1-Elevator/Elevator\ Scheduling/UserSettings/
-Project1-Elevator/Elevator\ Scheduling/UserSettings/
-Project1-Elevator/Elevator\ Scheduling/v1.0_BurstDebugInformation_DoNotShip/
-Project1-Elevator/Elevator\ Scheduling/v1.1_BurstDebugInformation_DoNotShip/
-Project1-Elevator/Elevator\ Scheduling/Assembly-CSharp.csproj
-Project1-Elevator/Elevator\ Scheduling/Elevator\ Scheduling.sln
+Project1-Elevator/Elevator\ Scheduling/
+!Project1-Elevator/Elevator\ Scheduling/Assets/Prefabs/
+!Project1-Elevator/Elevator\ Scheduling/Assets/Resources/
+!Project1-Elevator/Elevator\ Scheduling/Assets/scripts/
+
 
 # Project2-PageSwapManagement
 Project2-PageSwapManagement/Architecture Illustration.pptx
 Project2-PageSwapManagement/ProjectCommit/
-Project2-PageSwapManagement/PageSwapManagement/.vscode
-Project2-PageSwapManagement/PageSwapManagement/Assets/Scenes/
-Project2-PageSwapManagement/PageSwapManagement/Assets/TextMesh\ Pro/
-Project2-PageSwapManagement/PageSwapManagement/Library/
-Project2-PageSwapManagement/PageSwapManagement/Logs/
-Project2-PageSwapManagement/PageSwapManagement/obj/
-Project2-PageSwapManagement/PageSwapManagement/Packages/
-Project2-PageSwapManagement/PageSwapManagement/ProjectSettings/
-Project2-PageSwapManagement/PageSwapManagement/UserSettings/
-Project2-PageSwapManagement/PageSwapManagement/Assembly-CSharp.csproj
-Project2-PageSwapManagement/PageSwapManagement/PageSwapManagement.sln
+Project2-PageSwapManagement/PageSwapManagement/
+!Project2-PageSwapManagement/PageSwapManagement/Assets/Prefabs/
+!Project2-PageSwapManagement/PageSwapManagement/Assets/Resources/
+!Project2-PageSwapManagement/PageSwapManagement/Assets/scripts/
+
 
 # Project3-FileManagement
 Project3-FileManagement/Architecture Illustration.pptx
 Project3-FileManagement/ProjectCommit/
-Project3-FileManagement/FileManagement/.vscode
-Project3-FileManagement/FileManagement/Assets/Scenes/
-Project3-FileManagement/FileManagement/Assets/TextMesh\ Pro/
-Project3-FileManagement/FileManagement/Library/
-Project3-FileManagement/FileManagement/Logs/
-Project3-FileManagement/FileManagement/obj/
-Project3-FileManagement/FileManagement/Packages/
-Project3-FileManagement/FileManagement/ProjectSettings/
-Project3-FileManagement/FileManagement/UserSettings/
-Project3-FileManagement/FileManagement/Assembly-CSharp.csproj
-Project3-FileManagement/FileManagement/FileManagement.sln
+Project3-FileManagement/FileManagement/
+!Project3-FileManagement/FileManagement/Assets/Prefabs/
+!Project3-FileManagement/FileManagement/Assets/Resources/
+!Project3-FileManagement/FileManagement/Assets/scripts/
