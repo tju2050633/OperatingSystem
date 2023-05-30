@@ -17,55 +17,47 @@ namespace FileManagement
         }
 
         // 根据按钮类型，让EventSystem执行相应的操作
-        private void onClick()
+        public void onClick()
         {
             btnType = gameObject.name;
 
-            if (btnType == "Forward")
+            if (btnType == "Forward" || btnType == "Backward")
             {
-                EventSystem.Instance.Forward();
+                EventSystem.Instance.Forward(btnType == "Forward");
             }
-            else if (btnType == "Backward")
+            else if (btnType == "Fold" || btnType == "Unfold")
             {
-                EventSystem.Instance.Backward();
+                // 找到按钮所在的文件夹物体
+                GameObject bar = transform.parent.gameObject;
+                EventSystem.Instance.Fold(bar, btnType == "Fold");
             }
-            else if (btnType == "Fold")
-            {
-                EventSystem.Instance.Fold();
-            }
-            else if (btnType == "Unfold")
-            {
-                EventSystem.Instance.Unfold();
-            }
+            // TODO
             else if (btnType == "AddFile")
             {
-                EventSystem.Instance.AddFile();
+                EventSystem.Instance.AddItem(true);
             }
             else if (btnType == "AddFolder")
             {
-                EventSystem.Instance.AddFolder();
+                EventSystem.Instance.AddItem(false);
             }
             else if (btnType == "DeleteFile")
             {
-                EventSystem.Instance.DeleteFile();
+                EventSystem.Instance.DeleteItem(true);
             }
             else if (btnType == "DeleteFolder")
             {
-                EventSystem.Instance.DeleteFolder();
+                EventSystem.Instance.DeleteItem(false);
             }
-        }
-
-        // 鼠标悬浮时，鼠标变为手型
-        private void OnMouseEnter()
-        {
-            Debug.Log("OnMouseEnter");
-            Cursor.SetCursor(Texture2D.whiteTexture, Vector2.zero, CursorMode.Auto);
-        }
-
-        // 鼠标离开时，鼠标变为箭头型
-        private void OnMouseExit()
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            else if (btnType == "RenameFile")
+            {
+                FileTree.Node node = null;
+                EventSystem.Instance.RenameItem(node, "newName", true);
+            }
+            else if (btnType == "RenameFolder")
+            {
+                FileTree.Node node = null;
+                EventSystem.Instance.RenameItem(node, "newName", false);
+            }
         }
     }
 }

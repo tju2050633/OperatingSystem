@@ -23,40 +23,238 @@ namespace FileManagement
             {
                 Destroy(this.gameObject);
             }
+
+            // 初始化文件树
+            root = new Node("root", false);
+            current = root;
+
+            Node folder1 = new Node("Folder1", false);
+            Node folder2 = new Node("Folder2", false);
+            Node file1 = new Node("File1", true);
+            Node file2 = new Node("File2", true);
+            Node file3 = new Node("File3", true);
+            Node file4 = new Node("File4", true);
+
+            root.AddChild(folder1);
+            root.AddChild(folder2);
+            root.AddChild(file1);
+            root.AddChild(file2);
+            folder1.AddChild(file3);
+            folder2.AddChild(file4);
         }
-        void Start()
+
+        // 文件树所需数据结构
+        public class Node
         {
+            public string name;
+            public bool isFile;
+            public List<Node> children;
+            public Node parent;
+            public bool onPath;
 
+            public Node(string name, bool isFile)
+            {
+                this.name = name;
+                this.isFile = isFile;
+                this.children = new List<Node>();
+                this.parent = null;
+                onPath = false;
+            }
+
+            public void AddChild(Node child)
+            {
+                this.children.Add(child);
+                child.parent = this;
+            }
+
+            public void RemoveChild(Node child)
+            {
+                this.children.Remove(child);
+                child.parent = null;
+            }
         }
 
+        private Node root;
+        private Node current;
+
+        // GUI组件持有它对应的文件树内部节点
+        // 可能是不好的依赖，或没有用
+        // 保留删除两个GetNode方法的可能性
+
+        public Node GetNode(string name)
+        {
+            // 从root开始递归查找
+            return GetNode(root, name);
+        }
+
+        private Node GetNode(Node node, string name)
+        {
+            // 如果找到了，返回该节点
+            if (node.name == name)
+            {
+                return node;
+            }
+
+            // 否则递归查找
+            foreach (Node child in node.children)
+            {
+                Node result = GetNode(child, name);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            // 如果没找到，返回null
+            return null;
+        }
+
+        public string GetCurrentDir()
+        {
+            return current.name;
+        }
+
+        public List<Node> GetCurrentDirChildren()
+        {
+            List<Node> children = new List<Node>();
+
+            foreach (Node child in current.children)
+            {
+                children.Add(child);
+            }
+
+            return children;
+        }
+
+        public bool CanBackward()
+        {
+            return current.parent != null;
+        }
+
+        public bool CanForward()
+        {
+            foreach (Node child in current.children)
+            {
+                if (child.onPath)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void EnterFolder(string name)
+        {
+            // 当前节点所有子节点的onPath设为false
+            foreach (Node child in current.children)
+            {
+                child.onPath = false;
+            }
+
+            // 找出子节点中名字为name的节点，将其设为当前节点
+            Node next = null;
+            foreach (Node child in current.children)
+            {
+                if (child.name == name && !child.isFile)
+                {
+                    next = child;
+                    break;
+                }
+            }
+            if (next == null)
+            {
+                Debug.Log("FileTree EnterFolder Error: No such folder");
+                return;
+            }
+            current = next;
+
+            // 当前节点的onPath设为true
+            current.onPath = true;
+        }
+
+        // 沿着路径前进
         public void Forward()
         {
-            Debug.Log("FileTree Forward");
+            // 找出子节点中onPath为true的节点，将其设为当前节点
+            Node next = null;
+            foreach (Node child in current.children)
+            {
+                if (child.onPath)
+                {
+                    next = child;
+                    break;
+                }
+            }
+            if (next == null)
+            {
+                Debug.Log("FileTree Forward Error: No child on path");
+                return;
+            }
+            current = next;
         }
 
+        // 沿着路径后退
         public void Backward()
         {
-            Debug.Log("FileTree Backward");
+            // 返回父节点
+            if (current.parent == null)
+            {
+                Debug.Log("FileTree Backward Error: No parent");
+                return;
+            }
+            current = current.parent;
         }
 
-        public void AddFile()
+        // TODO
+
+        // 添加文件/文件夹
+        public void AddNode(string name, bool isFile)
         {
-            Debug.Log("FileTree AddFile");
+            Debug.Log("FileTree AddNode");
+
+            Node node = new Node(name, isFile);
+            current.AddChild(node);
         }
 
-        public void AddFolder()
-        {
-            Debug.Log("FileTree AddFolder");
-        }
 
-        public void DeleteFile()
+        // 删除文件/文件夹
+        public void DeleteNode(string name, bool isFile)
         {
-            Debug.Log("FileTree DeleteFile");
-        }
+            Debug.Log("FileTree DeleteNode");
 
-        public void DeleteFolder()
+            Node node = null;
+            foreach (Node child in current.children)
+            {
+                if (child.name == name && child.isFile == isFile)
+                {
+                    node = child;
+                    break;
+                }
+            }
+            if (node == null)
+            {
+                Debug.Log("FileTree DeleteNode Error: No such node");
+                return;
+            }
+            current.RemoveChild(node);
+
+            // 如果是文件夹，则递归删除子节点
+            if (isFile)
+                return;
+
+            foreach (Node child in node.children)
+            {
+                DeleteNode(child.name, true);
+                DeleteNode(child.name, false);
+            }
+        }
+    
+        // 重命名文件/文件夹
+        public void RenameNode(Node node, string name, bool isFile)
         {
-            Debug.Log("FileTree DeleteFolder");
+            Debug.Log("FileTree RenameNode");
+
+            node.name = name;
         }
     }
 }

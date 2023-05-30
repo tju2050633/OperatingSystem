@@ -11,18 +11,17 @@ namespace FileManagement
         private float clickTimeThreshold = 0.3f; // 双击时间阈值，单位为秒
         public bool showWindow = false; // 是否显示小窗口
 
+        // 存储FileTree中对应的节点
+        public FileTree.Node node;
+
         void Start()
         {
             // 获取collider组件, 并添加点击事件监听
             var collider = GetComponent<Collider>();
 
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            // 获取节点
+            string name = gameObject.name;
+            node = FileTree.Instance.GetNode(name);
         }
 
         public void OnPointerClick(PointerEventData eventData)

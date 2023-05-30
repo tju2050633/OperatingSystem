@@ -25,61 +25,67 @@ namespace FileManagement
             }
         }
 
-        void Start()
+        public void Forward(bool forward, string name = "")
         {
+            // 文件树数据更新
+            if(name != "")
+                FileTree.Instance.EnterFolder(name);
+            else if (forward)
+                FileTree.Instance.Forward();
+            else
+                FileTree.Instance.Backward();
 
-        }
+            // GUI按钮更新
+            GUIManager.Instance.ModifyButtons();
 
-        public void Forward()
-        {
-            FileTree.Instance.Forward();
-            GUIManager.Instance.ModifyPath();
+            // GUI路径更新
+            string path = GUIManager.Instance.GetPath();
+
+            if (forward)
+            {
+                if(name == "")
+                    name = FileTree.Instance.GetCurrentDir();
+                path += " > " + name;
+            }
+            else
+            {
+                int index = path.LastIndexOf('>');
+                path = path.Substring(0, index - 1);
+            }
+
+            GUIManager.Instance.ModifyPath(path);
+
+            // GUI主区域更新
             GUIManager.Instance.ReloadMainArea();
         }
 
-        public void Backward()
+        public void Fold(GameObject bar, bool fold)
         {
-            FileTree.Instance.Backward();
-            GUIManager.Instance.ModifyPath();
-            GUIManager.Instance.ReloadMainArea();
+            GUIManager.Instance.Fold(bar, fold);
         }
 
-        public void Fold()
+        // TODO
+        public void AddItem(bool isFile)
         {
-            GUIManager.Instance.Fold();
-        }
-
-        public void Unfold()
-        {
-            GUIManager.Instance.Unfold();
-        }
-
-        public void AddFile()
-        {
-            FileTree.Instance.AddFile();
+            FileTree.Instance.AddNode("NewFile", isFile);
             GUIManager.Instance.AddFileBar();
             GUIManager.Instance.AddFileItem();
         }
 
-        public void AddFolder()
+        public void DeleteItem(bool isFile)
         {
-            FileTree.Instance.AddFolder();
-            GUIManager.Instance.AddFolderBar();
-            GUIManager.Instance.AddFolderItem();
-        }
-
-        public void DeleteFile()
-        {
-            FileTree.Instance.DeleteFile();
+            FileTree.Instance.DeleteNode("File1", isFile);
             GUIManager.Instance.DeleteFileBar();
             GUIManager.Instance.DeleteFileItem();
         }
 
-        public void DeleteFolder()
+        public void RenameItem(FileTree.Node node, string name, bool isFile)
         {
-            FileTree.Instance.DeleteFolder();
-            GUIManager.Instance.DeleteFolderBar();
-            GUIManager.Instance.DeleteFolderItem();
+            FileTree.Instance.RenameNode(node, name, isFile);
+            GUIManager.Instance.RenameBar(node, name, isFile);
+            GUIManager.Instance.RenameItem(node, name, isFile);
+            if(!isFile)
+                GUIManager.Instance.RenamePath(node, name, isFile);
         }
     }
 }
