@@ -109,9 +109,9 @@ namespace FileManagement
             return null;
         }
 
-        public string GetCurrentDir()
+        public Node GetCurrentDir()
         {
-            return current.name;
+            return current;
         }
 
         public List<Node> GetCurrentDirChildren()
@@ -208,12 +208,35 @@ namespace FileManagement
         // TODO
 
         // 添加文件/文件夹
-        public void AddNode(string name, bool isFile)
+        public string AddNode(bool isFile)
         {
             Debug.Log("FileTree AddNode");
 
+            // 找一个当前文件夹没有的名字
+            string name = "New";
+            List<string> names = new List<string>();
+            foreach (Node child in current.children)
+            {
+                if(child.isFile == isFile)
+                    names.Add(child.name);
+            }
+
+            int i = 1;
+            while (true)
+            {
+                if (!names.Contains(name))
+                {
+                    break;
+                }
+                name = "New" + i.ToString();
+                i++;
+            }
+
+            // 创建新节点，加入当前文件夹
             Node node = new Node(name, isFile);
             current.AddChild(node);
+
+            return name;
         }
 
 
@@ -248,9 +271,9 @@ namespace FileManagement
                 DeleteNode(child.name, false);
             }
         }
-    
+
         // 重命名文件/文件夹
-        public void RenameNode(Node node, string name, bool isFile)
+        public void RenameNode(Node node, string name)
         {
             Debug.Log("FileTree RenameNode");
 

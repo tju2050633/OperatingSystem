@@ -28,7 +28,7 @@ namespace FileManagement
         public void Forward(bool forward, string name = "")
         {
             // 文件树数据更新
-            if(name != "")
+            if (name != "")
                 FileTree.Instance.EnterFolder(name);
             else if (forward)
                 FileTree.Instance.Forward();
@@ -43,8 +43,8 @@ namespace FileManagement
 
             if (forward)
             {
-                if(name == "")
-                    name = FileTree.Instance.GetCurrentDir();
+                if (name == "")
+                    name = FileTree.Instance.GetCurrentDir().name;
                 path += " > " + name;
             }
             else
@@ -61,31 +61,32 @@ namespace FileManagement
 
         public void Fold(GameObject bar, bool fold)
         {
+            bar.GetComponent<FolderBar>().folded = fold;
             GUIManager.Instance.Fold(bar, fold);
         }
 
         // TODO
         public void AddItem(bool isFile)
         {
-            FileTree.Instance.AddNode("NewFile", isFile);
-            GUIManager.Instance.AddFileBar();
-            GUIManager.Instance.AddFileItem();
+            string name = FileTree.Instance.AddNode(isFile);
+            GUIManager.Instance.AddBar(name, isFile);
+            GUIManager.Instance.ReloadMainArea();
         }
 
         public void DeleteItem(bool isFile)
         {
             FileTree.Instance.DeleteNode("File1", isFile);
-            GUIManager.Instance.DeleteFileBar();
-            GUIManager.Instance.DeleteFileItem();
+            GUIManager.Instance.DeleteBar();
+            GUIManager.Instance.ReloadMainArea();
         }
 
         public void RenameItem(FileTree.Node node, string name, bool isFile)
         {
-            FileTree.Instance.RenameNode(node, name, isFile);
-            GUIManager.Instance.RenameBar(node, name, isFile);
-            GUIManager.Instance.RenameItem(node, name, isFile);
-            if(!isFile)
-                GUIManager.Instance.RenamePath(node, name, isFile);
+            FileTree.Instance.RenameNode(node, name);
+            GUIManager.Instance.RenameBar(node, name);
+            GUIManager.Instance.RenameItem(node, name);
+            if (!isFile)
+                GUIManager.Instance.RenamePath(node, name);
         }
     }
 }

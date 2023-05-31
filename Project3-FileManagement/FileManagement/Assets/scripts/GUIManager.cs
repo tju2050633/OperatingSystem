@@ -32,14 +32,54 @@ namespace FileManagement
         public GameObject buttons;
         public GameObject path;
         public GameObject navi;
+        public GameObject file_bar;
+        public GameObject folder_bar;
         Vector2 navi_original = new Vector2(0, 520);
-        Vector2 navi_bias = new Vector2(180, -80);
+        Vector2 navi_bias = new Vector2(80, -80);
+        Vector3 navi_folder_scale = new Vector3(1, 1, 1);
+        Vector3 navi_file_scale = new Vector3(0.5f, 1, 1);
+        public Sprite folder_close;
+        public Sprite folder_open;
         public GameObject main_area;
         Vector2 main_area_original = new Vector2(-770, 409);
-        Vector2 main_area_bias = new Vector2(270, -200);
+        Vector2 main_area_bias = new Vector2(270, -300);
         int max_col = 6;
         public GameObject file_item;
         public GameObject folder_item;
+
+        // 递归找到node对应的物体
+        private GameObject GetObjectByNode(GameObject root, FileTree.Node node)
+        {
+            // 判断根节点
+            if(root.GetComponent<FolderBar>().node == node)
+                return root;
+
+            // 遍历子节点
+            foreach (Transform child in root.transform.Find("Children"))
+            {
+                // 获取节点
+                FileTree.Node cur_node;
+                if (child.gameObject.GetComponent<FolderBar>() == null)
+                    cur_node = child.gameObject.GetComponent<FileBar>().node;
+                else
+                    cur_node = child.gameObject.GetComponent<FolderBar>().node;
+
+                // 如果是目标节点，返回
+                if (cur_node == node)
+                {
+                    return child.gameObject;
+                }
+
+                // 如果是文件夹，还需递归查找
+                if (child.gameObject.GetComponent<FolderBar>() != null)
+                {
+                    return GetObjectByNode(child.gameObject, node);
+                }
+            }
+
+            Debug.Log("GUIManager GetObjectByNode Error: No such node");
+            return null;
+        }
 
         public string GetPath()
         {
@@ -153,6 +193,9 @@ namespace FileManagement
             // 箭头旋转
             arrow.GetComponent<RectTransform>().Rotate(new Vector3(0, 0, fold ? 90 : -90));
 
+            // 更换图标
+            bar.transform.Find("Icon").GetComponent<Image>().sprite = fold ? folder_close : folder_open;
+
             // 获取所有子物体
             List<GameObject> children = new List<GameObject>();
             foreach (Transform child in bar.transform.Find("Children"))
@@ -174,7 +217,7 @@ namespace FileManagement
                 if (sibling.GetComponent<RectTransform>().anchoredPosition.y < bar.GetComponent<RectTransform>().anchoredPosition.y)
                 {
                     float bias = navi_bias.y;
-                    sibling.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, fold ? -bias : bias);
+                    sibling.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, fold ? -bias : bias) * children.Count;
                 }
             }
 
@@ -182,90 +225,92 @@ namespace FileManagement
 
         // TODO
 
-        public void AddFileBar()
+        public void AddBar(string name, bool isFile)
         {
-            Debug.Log("GUI AddFileBar");
+            // 当前文件夹物体下所有子物体
+            FileTree.Node current_dir = FileTree.Instance.GetCurrentDir();
+            GameObject root = navi.transform.Find("root").gameObject;
+            GameObject current_dir_bar = GetObjectByNode(root, current_dir);
+            List<GameObject> children = new List<GameObject>();
+            foreach (Transform child in current_dir_bar.transform.Find("Children"))
+            {
+                children.Add(child.gameObject);
+            }
+
+            // 找到子物体中相同类型（文件夹/文件）y值最低的
+            float min_y = 0;
+            foreach (GameObject child in children)
+            {
+                // 判断相同类型
+                if (isFile && child.GetComponent<FileBar>() != null
+                || !isFile && child.GetComponent<FolderBar>() != null)
+                {
+                    // 判断y值
+                    if (child.GetComponent<RectTransform>().anchoredPosition.y < min_y)
+                        min_y = child.GetComponent<RectTransform>().anchoredPosition.y;
+                }
+            }
+
+            // 如果是文件夹，需要把y值更小的文件下移
+            if (!isFile)
+            {
+                foreach (GameObject child in children)
+                {
+                    if (child.GetComponent<FileBar>() != null && child.GetComponent<RectTransform>().anchoredPosition.y < min_y)
+                        child.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, navi_bias.y);
+                }
+            }
+
+            // 创建新物体，放在最低y值下面
+            GameObject new_bar = Instantiate(isFile ? file_bar : folder_bar, current_dir_bar.transform.Find("Children"));
+            new_bar.name = name;
+            new_bar.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
+            float x = navi_bias.x;
+            float y = min_y + navi_bias.y;
+            new_bar.GetComponent<RectTransform>().anchoredPosition = new Vector2(x, y);
+
+            if(isFile)
+                new_bar.GetComponent<RectTransform>().localScale = navi_file_scale;
+            else
+                new_bar.GetComponent<RectTransform>().localScale = navi_folder_scale;
+
+            // 父物体文件夹被折叠，则隐藏
+            if (current_dir_bar.transform.Find("Unfold") != null)
+                new_bar.SetActive(false);
         }
 
-        public void AddFolderBar()
+        public void DeleteBar()
         {
-            Debug.Log("GUI AddFolderBar");
-        }
-
-        public void DeleteFolderBar()
-        {
-            Debug.Log("GUI DeleteFolderBar");
-        }
-
-        public void DeleteFileBar()
-        {
-            Debug.Log("GUI DeleteFileBar");
-        }
-
-        public void AddFileItem()
-        {
-            Debug.Log("GUI AddFileItem");
-        }
-
-        public void AddFolderItem()
-        {
-            Debug.Log("GUI AddFolderItem");
-        }
-
-        public void DeleteFileItem()
-        {
-            Debug.Log("GUI DeleteFileItem");
-        }
-
-        public void DeleteFolderItem()
-        {
-            Debug.Log("GUI DeleteFolderItem");
-        }
-
-        public void RenameBar(FileTree.Node node, string name, bool isFile)
-        {
-            Debug.Log("GUI RenameBar");
-
-            RenameBar(navi, node, name, isFile);
+            Debug.Log("GUI DeleteBar");
         }
 
         //////////////////////////////////////////////
+        /// 修改名字：bar, item, path <summary>
         /// 修改名字：bar, item, path
         //////////////////////////////////////////////
 
-        public void RenameBar(GameObject root, FileTree.Node node, string name, bool isFile)
+        public void RenameBar(FileTree.Node node, string name)
         {
-            // 递归找到node对应的物体
-            foreach (Transform child in root.transform)
-            {
-                FileTree.Node cur_node = child.GetComponent<FolderBar>().node;
-                if(cur_node == null)
-                    cur_node = child.GetComponent<FileBar>().node;
+            Debug.Log("GUI RenameBar");
 
-                if (cur_node == node)
-                {
-                    child.gameObject.name = name;
-                    break;
-                }
-
-                // 如果是文件夹，还需递归查找
-                if (child.GetComponent<FolderBar>() != null)
-                {
-                    RenameBar(child.gameObject, node, name, isFile);
-                }
-            }
+            GameObject root = navi.transform.Find("root").gameObject;
+            GameObject bar = GetObjectByNode(root, node);
+            bar.gameObject.name = name;
+            bar.gameObject.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
         }
 
-        public void RenameItem(FileTree.Node node, string name, bool isFile)
+        public void RenameItem(FileTree.Node node, string name)
         {
             Debug.Log("GUI RenameItem");
 
             // 从主区域中找到node对应的物体
             foreach (Transform child in main_area.transform)
             {
-                FileTree.Node cur_node = child.GetComponent<FolderBar>().node;
-                if(cur_node == null)
-                    cur_node = child.GetComponent<FileBar>().node;
+                FileTree.Node cur_node = null;
+                if (child.gameObject.GetComponent<FolderItem>() != null)
+                    cur_node = child.gameObject.GetComponent<FolderItem>().node;
+                else
+                    cur_node = child.gameObject.GetComponent<FileItem>().node;
 
                 if (cur_node == node)
                 {
@@ -275,11 +320,11 @@ namespace FileManagement
             }
         }
 
-        public void RenamePath(FileTree.Node node, string name, bool isFile)
+        public void RenamePath(FileTree.Node node, string name)
         {
             Debug.Log("GUI RenamePath");
 
-            if(!node.onPath)
+            if (!node.onPath)
                 return;
 
             // 从path中找到旧名字子字符串，替换为新名字

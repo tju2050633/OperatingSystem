@@ -32,31 +32,18 @@ namespace FileManagement
                 EventSystem.Instance.Fold(bar, btnType == "Fold");
             }
             // TODO
-            else if (btnType == "AddFile")
+            else if (btnType == "AddFile" || btnType == "AddFolder")
             {
-                EventSystem.Instance.AddItem(true);
+                EventSystem.Instance.AddItem(btnType == "AddFile");
             }
-            else if (btnType == "AddFolder")
+            else if (btnType == "DeleteFile" || btnType == "DeleteFolder")
             {
-                EventSystem.Instance.AddItem(false);
+                EventSystem.Instance.DeleteItem(btnType == "DeleteFile");
             }
-            else if (btnType == "DeleteFile")
-            {
-                EventSystem.Instance.DeleteItem(true);
-            }
-            else if (btnType == "DeleteFolder")
-            {
-                EventSystem.Instance.DeleteItem(false);
-            }
-            else if (btnType == "RenameFile")
+            else if (btnType == "RenameFile" || btnType == "RenameFolder")
             {
                 FileTree.Node node = null;
-                EventSystem.Instance.RenameItem(node, "newName", true);
-            }
-            else if (btnType == "RenameFolder")
-            {
-                FileTree.Node node = null;
-                EventSystem.Instance.RenameItem(node, "newName", false);
+                EventSystem.Instance.RenameItem(node, "newName", btnType == "RenameFile");
             }
         }
     }
