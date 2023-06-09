@@ -6,6 +6,9 @@ namespace FileManagement
 {
     public class FileTree : MonoBehaviour
     {
+        // FAT
+        public FAT fat;
+
         // 单例模式
         private static FileTree instance;
         public static FileTree Instance
@@ -41,6 +44,19 @@ namespace FileManagement
             root.AddChild(file2);
             folder1.AddChild(file3);
             folder2.AddChild(file4);
+
+            // 初始化FAT
+            fat.Init();
+
+            // 写入初始内容
+            string file1_content = "Hello World! This is File1.";
+            int file1_start = fat.AllocateFileBlocks(file1_content);
+            if(file1_start != -1)
+            {
+                file1.start_block = file1_start;
+            }
+
+
         }
 
         // 文件树所需数据结构
@@ -48,6 +64,8 @@ namespace FileManagement
         {
             public string name;
             public bool isFile;
+            public int start_block = -1;
+
             public List<Node> children;
             public Node parent;
             public bool onPath;
@@ -217,7 +235,7 @@ namespace FileManagement
             List<string> names = new List<string>();
             foreach (Node child in current.children)
             {
-                if(child.isFile == isFile)
+                if (child.isFile == isFile)
                     names.Add(child.name);
             }
 
