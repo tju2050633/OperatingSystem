@@ -56,7 +56,26 @@ namespace FileManagement
                 file1.start_block = file1_start;
             }
 
+            string file2_content = "Hello World! This is File2.";
+            int file2_start = fat.AllocateFileBlocks(file2_content);
+            if (file2_start != -1)
+            {
+                file2.start_block = file2_start;
+            }
 
+            string file3_content = "Hello World! This is File3.";
+            int file3_start = fat.AllocateFileBlocks(file3_content);
+            if (file3_start != -1)
+            {
+                file3.start_block = file3_start;
+            }
+
+            string file4_content = "Hello World! This is File4.";
+            int file4_start = fat.AllocateFileBlocks(file4_content);
+            if (file4_start != -1)
+            {
+                file4.start_block = file4_start;
+            }
         }
 
         // 文件树所需数据结构

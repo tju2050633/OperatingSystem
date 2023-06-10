@@ -22,6 +22,7 @@ namespace FileManagement
             // 获取节点
             string name = gameObject.name;
             node = FileTree.Instance.GetNode(name);
+
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -30,9 +31,6 @@ namespace FileManagement
             {
                 if (isClicked)
                 {
-                    // 双击逻辑
-                    Debug.Log("Double Clicked!");
-
                     // 显示文件内容窗口
                     showWindow = !showWindow;
                 }
@@ -58,18 +56,44 @@ namespace FileManagement
                 string content = "Hello World!";
 
                 // 绘制小窗口
-                GUI.Window(0, new Rect(110, 10, 2000, 600), DoMyWindow, content);
+                GUI.Window(0, new Rect(100, 50, 1000, 600), DoMyWindow, content);
             }
         }
 
         // 绘制小窗口
         void DoMyWindow(int windowID)
         {
-            GUI.Button(new Rect(10, 30, 800, 200), "Click Me!");
-            GUI.Label(new Rect(10, 10, 100, 20), "Hello World!");
+            GUI.SetNextControlName("TextField");
+            GUI.FocusControl("TextField");
 
-            // Make the windows be draggable.
+            string content;
+            if (node.start_block == -1)
+                content = "";
+            else
+                content = FileTree.Instance.fat.GetFileContent(node.start_block);
+
+            // 创建一个用于显示和修改文本的文本框
+            GUI.SetNextControlName("TextField");
+            string newText = GUI.TextArea(new Rect(20, 20, 960, 560), content);
+
+            // 按下回车键时，将新文本保存到content变量中
+            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return)
+            {
+                content = newText;
+                GUI.FocusControl(null); // 取消文本框焦点，以便显示关闭按钮
+            }
+
+            // 创建关闭窗口的按钮
+            if (GUI.Button(new Rect(10, 5, 30, 20), "X"))
+            {
+                showWindow = false;
+                FileTree.Instance.fat.DeleteFile(node.start_block);
+                FileTree.Instance.fat.AllocateFileBlocks(content);
+            }
+
+            // 使窗口可拖动
             GUI.DragWindow(new Rect(0, 0, 10000, 10000));
         }
+
     }
 }
