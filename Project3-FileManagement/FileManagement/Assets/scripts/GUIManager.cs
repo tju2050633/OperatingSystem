@@ -41,9 +41,9 @@ namespace FileManagement
         public Sprite folder_close;
         public Sprite folder_open;
         public GameObject main_area;
-        Vector2 main_area_original = new Vector2(-770, 409);
-        Vector2 main_area_bias = new Vector2(270, -300);
-        int max_col = 6;
+        Vector2 main_area_original = new Vector2(-900, 400);
+        Vector2 main_area_bias = new Vector2(300, -300);
+        int max_col = 5;
         public GameObject file_item;
         public GameObject folder_item;
 

@@ -53,7 +53,7 @@ namespace FileManagement
             // Make sure we only call GUI.Window if doWindow0 is true.
             if (showWindow)
             {
-                string content = "Hello World!";
+                string content = "File Editor";
 
                 // 绘制小窗口
                 GUI.Window(0, new Rect(100, 50, 1000, 600), DoMyWindow, content);
@@ -68,19 +68,22 @@ namespace FileManagement
 
             string content;
             if (node.start_block == -1)
-                content = "";
+                content = "Hello world";
             else
                 content = FileTree.Instance.fat.GetFileContent(node.start_block);
 
             // 创建一个用于显示和修改文本的文本框
             GUI.SetNextControlName("TextField");
-            string newText = GUI.TextArea(new Rect(20, 20, 960, 560), content);
+            // 调整字体
+            GUI.skin.textArea.fontSize = 50;
+            content = GUI.TextArea(new Rect(10, 30, 980, 560), content);
 
-            // 按下回车键时，将新文本保存到content变量中
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return)
+            // 文本框失去焦点时，保存文本框中的内容
+            if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
             {
-                content = newText;
-                GUI.FocusControl(null); // 取消文本框焦点，以便显示关闭按钮
+                GUI.FocusControl(null);
+                FileTree.Instance.fat.DeleteFile(node.start_block);
+                FileTree.Instance.fat.AllocateFileBlocks(content);
             }
 
             // 创建关闭窗口的按钮
